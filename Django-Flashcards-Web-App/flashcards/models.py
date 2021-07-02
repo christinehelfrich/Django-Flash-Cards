@@ -6,7 +6,8 @@ class Card_Set(models.Model):
     '''
     Card_Set model functions as the deck that a card belongs to
     A deck has a topic and description
-    '''                                                        
+    ''' 
+    amount_flipped = 0
     topic = models.CharField(max_length = 50, null = False, blank = False)       # Topic of the Deck
     description = models.CharField(max_length = 300, null = False, blank = True) # Description of topic
     created_by = models.CharField(max_length= 300, null = False, blank = True)
@@ -34,6 +35,27 @@ class Card_Set(models.Model):
         random_number = random.randint(0, self.card_set.count() - 1)    # Return random card from deck
         random_card = self.card_set.all()[random_number]
         return random_card
+    
+            
+    def been_flipped(self, card):
+        """
+        Returns True if the card in the deck has been visited
+        """
+        if card.is_active() == True:
+            return True
+        else:
+            return False
+
+
+    def find_cards_flipped(self):
+        """
+        Returns the number of cards in the deck
+        """
+        for card in self.parent_card_set:
+            if self.been_flipped(card) == True:
+                amount_flipped = amount_flipped + 1
+                
+       return amount_flipped
 
 
 class Card(models.Model):
